@@ -1,0 +1,13 @@
+Entrée touches directionnelles
+    si case pleine :
+        - si mur :
+            block
+        - si objet :
+            acquisition objet
+    si Gardien :
+        - si objets acquis :
+            passe + gagné
+        -si objet non acquis :
+            block + perdu
+    sinon :
+        déplacer personnage
