@@ -29,29 +29,38 @@ def user_input():
         User input function for direction
         """
         direction = input("Dans quelle direction souhaitez-vous aller ?(Z, Q, S ou D pour jouer)")
+        direction = direction.lower()
         character_control = re.findall("(?i)z|q|s|d", direction)
         if (character_control) :
-                print(direction)
                 return (direction)
         else:
                 user_input()
 
-def player_movement(x, y, direction):
+def player_movement(x, y, direction, course):
         if direction == "d":
-                x += 1
-                print(x)
-                return(x, y)
+                if course[y][x + 1] == " ":
+                        x += 1
+                        return(x, y)
+                else :
+                        return(x, y)        
         elif direction == "z":
-                y -= 1
-                return (x, y)
+                if course[y - 1][x] == " ":
+                                y -= 1
+                                return(x, y)
+                else :
+                        return (x, y)
         elif direction == "q":
-                x -= 1
-                return(x, y)
+                if course[y][x - 1] == " ":
+                        x -= 1
+                        return(x, y)
+                else :
+                        return(x, y)
         elif direction == "s":
-                y += 1
-                return(x, y)
-        else:
-                pass
+                if course[y + 1][x] == " ":
+                        y += 1
+                        return(x, y)
+                else:
+                        return(x, y)
 
 
 def main():
@@ -65,7 +74,7 @@ def main():
         lab_display(course)
         direction = user_input()
         course[y][x] = " "
-        x, y = (player_movement(x,y, direction))
+        x, y = (player_movement(x,y, direction, course))
         print(x, y)
         course[y][x] = "x"
         print(direction)
