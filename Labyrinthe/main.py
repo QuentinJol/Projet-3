@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
 import re
+from random import randint
 
 
 def read_file(file):
@@ -17,6 +18,22 @@ def read_file(file):
 
 
 
+def objects_position(course):
+        """
+        Objects position in labyrinthe
+        """
+        i = 0
+        y = 0
+        x = 0    
+        while i < 3 :
+                y = randint(1, 15)
+                x = randint(1, 15)
+                if course[y][x] == " " :
+                        course[y][x]= "o"
+                        i += 1
+                else :
+                        pass
+
 def lab_display(course):
         """
         Display labyrinthe function
@@ -30,62 +47,59 @@ def user_input():
         """
         direction = input("Dans quelle direction souhaitez-vous aller ?(Z, Q, S ou D pour jouer)")
         direction = direction.lower()
-        character_control = re.findall("(?i)z|q|s|d", direction)
+        character_control = re.search("z|q|s|d", direction)
         if (character_control) :
                 return (direction)
         else:
                 user_input()
 
 def player_movement(x, y, direction, course):
-        if direction == "d":
-                if course[y][x + 1] == " ":
-                        x += 1
-                        return(x, y)
-                else :
-                        return(x, y)        
-        elif direction == "z":
-                if course[y - 1][x] == " ":
-                                y -= 1
-                                return(x, y)
-                else :
-                        return (x, y)
-        elif direction == "q":
-                if course[y][x - 1] == " ":
-                        x -= 1
-                        return(x, y)
-                else :
-                        return(x, y)
-        elif direction == "s":
-                if course[y + 1][x] == " ":
-                        y += 1
-                        return(x, y)
-                else:
-                        return(x, y)
+        if direction == "d" and course[y][x + 1] == " ": 
+                x += 1    
+        elif direction == "z" and course[y - 1][x] == " ":
+                y -= 1
+        elif direction == "q" and course[y][x - 1] == " ":
+                x -= 1
+        elif direction == "s" and course[y + 1][x] == " ":
+                y += 1
+        return(x, y)
 
+def objects_capture(objects, course, x, y):
+        if course[y+1][x] == "o" or course[y-1][x] == "o" or course[y][x+1] == "o" or course[y][x-1] == "o" :
+                objects += 1
+                print("Vous avez acquis un objet")
+                return objects
+        else :
+                pass
 
 def main():
         course = []
         course_file = "parcours"
         direction ="a"
+        gardien = 0
+        objects = 0
         x = 1
         y = 1
         course = read_file(course_file)
         course[y][x] = "p"
+        objects_position(course)
         lab_display(course)
-        direction = user_input()
-        course[y][x] = " "
-        x, y = (player_movement(x,y, direction, course))
-        print(x, y)
-        course[y][x] = "x"
-        print(direction)
-        lab_display(course)
+        while gardien != 1 :
+                direction = user_input()
+                course[y][x] = " "
+                x, y = (player_movement(x,y, direction, course))
+                course[y][x] = "p"
+                objects_capture(objects, course, x, y)
+                if course[y+1][x] == "G" or course[y-1][x] == "G" or course[y][x+1] == "G" or course[y][x-1] == "G" :
+                        if objects == 3:
+                                gardien += 1
+                                print("Vous avez gagné !!!")
+                                break
+                        else :
+                                print("Vous avez perdu !")
+                                break
+                lab_display(course)
 
 
 main()
-
-#while course[15][10] != "p" :
- #       direction = input("Dans quelle direction souhaitez-vous aller ?")
-  #      if direction = "z":
-   #             if 
-
 
