@@ -2,11 +2,21 @@
 
 import re
 from random import randint
+import os
+import pygame
+from pygame.locals import *
 
+
+def file_control(file):
+        try:
+                with open(file):
+                        pass
+        except IOError:
+                print("Erreur! Le fichier n' pas pu être ouvert")
 
 def read_file(file):
         """
-        Reading function for Labyrinthe file
+        Reading function for labyrinthe file
         """
         with open(file, 'r') as fichier:
                 temp_list = []
@@ -20,7 +30,7 @@ def read_file(file):
 
 def objects_position(course):
         """
-        Objects position in labyrinthe
+        Objects positioning in labyrinthe
         """
         i = 0
         y = 0
@@ -31,8 +41,7 @@ def objects_position(course):
                 if course[y][x] == " " :
                         course[y][x]= "o"
                         i += 1
-                else :
-                        pass
+
 
 def lab_display(course):
         """
@@ -50,55 +59,61 @@ def user_input():
         character_control = re.search("z|q|s|d", direction)
         if (character_control) :
                 return (direction)
-        else:
-                user_input()
+        user_input()
 
 def player_movement(x, y, direction, course):
-        if direction == "d" and course[y][x + 1] == " ": 
+        if direction == "d" and course[y][x + 1] in [" ", "o"]: 
                 x += 1    
-        elif direction == "z" and course[y - 1][x] == " ":
+        elif direction == "z" and course[y - 1][x] in [" ", "o"]:
                 y -= 1
-        elif direction == "q" and course[y][x - 1] == " ":
+        elif direction == "q" and course[y][x - 1] in [" ", "o"]:
                 x -= 1
-        elif direction == "s" and course[y + 1][x] == " ":
+        elif direction == "s" and course[y + 1][x] in [" ", "o"]:
                 y += 1
         return(x, y)
 
-def objects_capture(objects, course, x, y):
-        if course[y+1][x] == "o" or course[y-1][x] == "o" or course[y][x+1] == "o" or course[y][x-1] == "o" :
+def objects_capture(x, y, course, objects):
+        if course[y][x] == "o":
                 objects += 1
                 print("Vous avez acquis un objet")
                 return objects
-        else :
-                pass
+        return objects
+
+def guardian_control(x, y, course, objects, guardian):
+         if course[y][x+1] == "G" or course[y][x-1] == "G" :
+                        if objects == 3:
+                                guardian = 1
+                                print("Vous avez gagné !!!")
+                                return guardian
+                        else :
+                                print("Vous avez perdu !")
+                                quit()
+                                
 
 def main():
         course = []
         course_file = "parcours"
         direction ="a"
-        gardien = 0
+        guardian = 0
         objects = 0
         x = 1
         y = 1
+        file_control(course_file)
         course = read_file(course_file)
         course[y][x] = "p"
         objects_position(course)
         lab_display(course)
-        while gardien != 1 :
+        while guardian != 1 :
+                print("\n")
                 direction = user_input()
                 course[y][x] = " "
                 x, y = (player_movement(x,y, direction, course))
+                objects = objects_capture(x, y, course, objects)
                 course[y][x] = "p"
-                objects_capture(objects, course, x, y)
-                if course[y+1][x] == "G" or course[y-1][x] == "G" or course[y][x+1] == "G" or course[y][x-1] == "G" :
-                        if objects == 3:
-                                gardien += 1
-                                print("Vous avez gagné !!!")
-                                break
-                        else :
-                                print("Vous avez perdu !")
-                                break
+                os.system("clear")
                 lab_display(course)
+                guardian = guardian_control(x, y, course, objects, guardian)
+
 
 
 main()

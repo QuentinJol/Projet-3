@@ -11,3 +11,9 @@ Entrée touches directionnelles
             block + perdu
     sinon :
         déplacer personnage
+
+
+        - code en anglais  
+        - position Gardien
+        - positionnement aléatoire objets
+        - 
