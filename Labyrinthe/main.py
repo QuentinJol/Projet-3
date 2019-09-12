@@ -7,24 +7,22 @@ import pygame
 from pygame.locals import *
 
 
-def file_control(file):
-        try:
-                with open(file):
-                        pass
-        except IOError:
-                print("Erreur! Le fichier n' pas pu être ouvert")
 
 def read_file(file):
         """
-        Reading function for labyrinthe file
+        Check and reading function for labyrinthe file
         """
-        with open(file, 'r') as fichier:
-                temp_list = []
-                temp_list2 = []
-                temp_list=(fichier.read().splitlines())
-                for line in temp_list:
-                        temp_list2.append(list(line.strip()))   
-        return temp_list2
+        try :
+                with open(file, 'r') as fichier:
+                        temp_list = []
+                        temp_list2 = []
+                        temp_list=(fichier.read().splitlines())
+                        for line in temp_list:
+                                temp_list2.append(list(line.strip()))   
+                return temp_list2
+        except IOError:
+                print("Erreur! Le fichier \"parcours\" n'a pas pu être ouvert.")
+                quit()
 
 
 
@@ -61,7 +59,7 @@ def user_input():
                 return (direction)
         user_input()
 
-def player_movement(x, y, direction, course):
+def player_movement(x, y, course, direction):
         if direction == "d" and course[y][x + 1] in [" ", "o"]: 
                 x += 1    
         elif direction == "z" and course[y - 1][x] in [" ", "o"]:
@@ -86,8 +84,9 @@ def guardian_control(x, y, course, objects, guardian):
                                 print("Vous avez gagné !!!")
                                 return guardian
                         else :
+                                guardian = 1
                                 print("Vous avez perdu !")
-                                quit()
+                                return guardian
                                 
 
 def main():
@@ -98,7 +97,6 @@ def main():
         objects = 0
         x = 1
         y = 1
-        file_control(course_file)
         course = read_file(course_file)
         course[y][x] = "p"
         objects_position(course)
@@ -107,7 +105,7 @@ def main():
                 print("\n")
                 direction = user_input()
                 course[y][x] = " "
-                x, y = (player_movement(x,y, direction, course))
+                x, y = (player_movement(x,y, course, direction))
                 objects = objects_capture(x, y, course, objects)
                 course[y][x] = "p"
                 os.system("clear")
