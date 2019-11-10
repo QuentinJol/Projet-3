@@ -5,6 +5,7 @@ Classes for Labyrinthe game
 """
 
 from random import randint
+import sys
 import pygame
 from pygame.locals import K_DOWN, K_ESCAPE, KEYDOWN, K_UP, K_LEFT, K_RIGHT, RESIZABLE
 
@@ -177,7 +178,7 @@ class Player:
                     player.objects_capture()
                     self.lab.course[self.y][self.x] = "p"
                 elif event.key == K_ESCAPE:
-                    quit()
+                    sys.exit()
                 return (self.x, self.y)
 
     def objects_capture(self):
