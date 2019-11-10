@@ -2,6 +2,6 @@ Jeu de labyrinthe avec MacGyver.
 
 Installation :
 
-Vous pouvez, si vous le souhaitez, lancer ce programme sur un environnement virtuel en utilisant le firchiers requirements.txt pour l'installation des modules nécessaires.
+Vous pouvez, si vous le souhaitez, lancer ce programme sur un environnement virtuel en utilisant le fichiers requirements.txt pour l'installation des modules nécessaires.
 
 Ce programme nécessite la présence du module PyGame. 
