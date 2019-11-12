@@ -58,8 +58,8 @@ class Map:
                 for line in temp_list:
                     self.course.append(list(line.strip()))
         except IOError:
-            print('Erreur! Le fichier "parcours" n\'a pas pu être ouvert.')
-            quit()
+            print('Erreur ! \nLe fichier "parcours" n\'a pas pu être ouvert.')
+            sys.exit()
 
     def player_start_position(self, x, y):
         """
